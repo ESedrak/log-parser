@@ -2,9 +2,8 @@ package ip_mgmt
 
 import (
 	"errors"
+	"log/slog"
 	"sort"
-
-	"github.com/sirupsen/logrus"
 )
 
 type IPCount struct {
@@ -39,7 +38,7 @@ func (i *IPCounter) MostActiveIP(requestedCount int) ([]IPCount, error) {
 
 	if len(ipCount) < requestedCount {
 		//do we want this warning here?
-		logrus.Warn("requested number of IPs is less than the number of unique IPs")
+		slog.Warn("requested number of IPs is less than the number of unique IPs")
 		return ipCount, nil
 	}
 

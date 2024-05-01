@@ -2,20 +2,19 @@ package main
 
 import (
 	"log-parser/internal/log_mgmt"
-
-	"github.com/sirupsen/logrus"
+	"log/slog"
 )
 
 func main() {
 	logs, err := log_mgmt.LoadLogs()
 	if err != nil {
-		logrus.Error(err)
+		slog.Error("unable to load logs", "error", err)
 		return
 	}
 
 	logMatches, err := log_mgmt.ParseLogData(logs)
 	if err != nil {
-		logrus.Error(err)
+		slog.Error("unable to parse logs", "error", err)
 		return
 	}
 
@@ -30,18 +29,18 @@ func main() {
 	mostActiveIPs, err := ipCounts.MostActiveIP(requestedCountIP)
 
 	if err != nil {
-		logrus.Error(err)
+		slog.Error("mostActiveIPs", "error", err)
 		return
 	}
 
 	topRequestedURLs, err := urlCounts.TopRequestedURLs(requestedCountURL)
 
 	if err != nil {
-		logrus.Error(err)
+		slog.Error("topRequestedURLs", "error", err)
 		return
 	}
 
-	logrus.Info("Unique IPs Count: ", uniqueIPs)
-	logrus.Info("Most Active IPs: ", mostActiveIPs)
-	logrus.Info("Top Requested URLs:", topRequestedURLs)
+	slog.Info("Unique IPs Count", "uniqueIPs", uniqueIPs)
+	slog.Info("Most Active IPs: ", "activeIPs", mostActiveIPs)
+	slog.Info("Top Requested URLs:", "requestedURLs", topRequestedURLs)
 }

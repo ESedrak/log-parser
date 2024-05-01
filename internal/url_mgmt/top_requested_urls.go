@@ -2,9 +2,8 @@ package url_mgmt
 
 import (
 	"errors"
+	"log/slog"
 	"sort"
-
-	"github.com/sirupsen/logrus"
 )
 
 type URLCount struct {
@@ -39,7 +38,7 @@ func (u *URLCounter) TopRequestedURLs(requestedCount int) ([]URLCount, error) {
 
 	if len(urlCount) < requestedCount {
 		//do we want this warning here?
-		logrus.Warn("requested number of URLs is less than the number of unique URLs")
+		slog.Warn("requested number of URLs is less than the number of unique URLs")
 		return urlCount, nil
 	}
 
