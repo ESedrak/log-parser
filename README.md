@@ -30,13 +30,13 @@ These logs are currently being stored and read from logs/log_file.log
 
 ## Dependencies
 
-### Install Go version 1.21
+### Install Go version 1.22
 
 <https://golang.org/doc/install>
 
 #### On macs: go can be installed through homebrew
 
-brew install go@1.21
+brew install go@1.22
 
 ### Makefile
 
