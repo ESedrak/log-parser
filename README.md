@@ -78,12 +78,6 @@ Run all tests:
 make test
 ```
 
-Run benchmark tests:
-
-```sh
-make bench-all
-```
-
 Remove all compiled executables instance
 
 ```sh
