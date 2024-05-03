@@ -1,39 +1,43 @@
 package main
 
 import (
+	"log-parser/internal/ip_mgmt"
 	"log-parser/internal/log_mgmt"
+	"log-parser/internal/url_mgmt"
 	"log/slog"
 )
 
 func main() {
-	logs, err := log_mgmt.LoadLogs()
-	if err != nil {
-		slog.Error("unable to load logs", "error", err)
-		return
-	}
+	filename := "logs/log_file.log"
 
-	logMatches, err := log_mgmt.ParseLogData(logs)
-	if err != nil {
-		slog.Error("unable to parse logs", "error", err)
-		return
-	}
+	logChan := make(chan string)
+	urlCountChan := make(chan map[string]int)
+	ipCountChan := make(chan map[string]int)
 
-	urlCounts, ipCounts := log_mgmt.CountLogMatchesIgnoresQuery(logMatches)
+	go log_mgmt.LoadLogs(filename, logChan)
 
-	uniqueIPs := ipCounts.UniqueIPs()
+	go log_mgmt.CountLogMatchesIgnoresQuery(logChan, urlCountChan, ipCountChan)
+
+	// receive URL counts
+	urlCount := <-urlCountChan
+
+	// receive IP counts
+	ipCount := <-ipCountChan
+
+	uniqueIPs := ip_mgmt.UniqueIPs(ipCount)
 
 	//choose how many URLs or IP addresses to return (has to be greater than 0)
-	requestedCountIP := 3
-	requestedCountURL := 3
+	requestedNumIP := 3
+	requestedNumURL := 3
 
-	mostActiveIPs, err := ipCounts.MostActiveIP(requestedCountIP)
+	mostActiveIPs, err := ip_mgmt.MostActiveIP(ipCount, requestedNumIP)
 
 	if err != nil {
 		slog.Error("mostActiveIPs", "error", err)
 		return
 	}
 
-	topRequestedURLs, err := urlCounts.TopRequestedURLs(requestedCountURL)
+	topRequestedURLs, err := url_mgmt.TopRequestedURLs(urlCount, requestedNumURL)
 
 	if err != nil {
 		slog.Error("topRequestedURLs", "error", err)

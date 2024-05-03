@@ -12,22 +12,18 @@ type URLCount struct {
 }
 
 /*
- * Question: How to handle excess occurrences?
- * E.g. if requestCount is 3, but there are 5 logs with the same number of URL calls. Only 3 results are returned.
- * Method is not idempotent
- *
  * Returns the top N most requested URL's along with their counts
  * Sorted by activity count in descending order
  */
-func (u *URLCounter) TopRequestedURLs(requestedCount int) ([]URLCount, error) {
-	if requestedCount < 1 {
+func TopRequestedURLs(urlCounts map[string]int, requestedNum int) ([]URLCount, error) {
+	if requestedNum < 1 {
 		return nil, errors.New("requested count for URLs has to be greater than 0")
 	}
 
 	var urlCount []URLCount
 
 	// convert map entries into URLCount instances
-	for url, count := range u.URLCounts {
+	for url, count := range urlCounts {
 		urlCount = append(urlCount, URLCount{URL: url, Count: count})
 	}
 
@@ -36,11 +32,10 @@ func (u *URLCounter) TopRequestedURLs(requestedCount int) ([]URLCount, error) {
 		return urlCount[j].Count < urlCount[i].Count
 	})
 
-	if len(urlCount) < requestedCount {
-		//do we want this warning here?
-		slog.Warn("requested number of URLs is less than the number of unique URLs")
+	if len(urlCount) < requestedNum {
+		slog.Warn("requested number is less than the number of unique URLs: returning the maximum possible amount")
 		return urlCount, nil
 	}
 
-	return urlCount[:requestedCount], nil
+	return urlCount[:requestedNum], nil
 }

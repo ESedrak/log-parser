@@ -1,20 +1,29 @@
 package log_mgmt
 
 import (
+	"bufio"
+	"log/slog"
 	"os"
 )
 
 /*
- * Question: Where is the logs coming from?
- *
- * This function is just reading from the logs/log_file.log
+ *  Function reads log entries one line at a time and sends them through a log channel for concurrent processing
  */
-func LoadLogs() ([]byte, error) {
-	filePath := "logs/log_file.log"
-
-	logs, err := os.ReadFile(filePath)
+func LoadLogs(filename string, logChan chan<- string) {
+	file, err := os.Open(filename)
 	if err != nil {
-		return nil, err
+		slog.Error("file", "error", err)
 	}
-	return logs, nil
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		logChan <- scanner.Text()
+	}
+
+	if err := scanner.Err(); err != nil {
+		slog.Error("scanner", "error", err)
+	}
+
+	close(logChan)
 }

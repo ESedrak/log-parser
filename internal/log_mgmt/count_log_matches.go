@@ -1,48 +1,35 @@
 package log_mgmt
 
-import (
-	"log-parser/internal/ip_mgmt"
-	"log-parser/internal/url_mgmt"
-	"strings"
-)
+import "regexp"
 
 /*
- * Question: Will you always want to remove the query?
- * Question: Will the wanted HTTP methods ever change?
- *
  * Function counts occurrences for the following HTTP methods: GET, PUT, DELETE, POST, HEAD.
- * Counts each unique IP address and URLs(ignores queries) in log matches
+ * Counts each unique IP address and URL(ignores queries)
  */
-func CountLogMatchesIgnoresQuery(logMatches [][]string) (*url_mgmt.URLCounter, *ip_mgmt.IPCounter) {
-	urlCounts := url_mgmt.NewUrlCounts()
-	ipCounts := ip_mgmt.NewIPCounter()
+func CountLogMatchesIgnoresQuery(logChan <-chan string, urlCountChan chan<- map[string]int, ipCountChan chan<- map[string]int) {
+	// match the IP address and URL(ignore query). Used https://regex101.com/.
+	logRegex := regexp.MustCompile(`(\d+\.\d+\.\d+\.\d+).+(?:GET|POST|PUT|DELETE|HEAD)\s([^ ?]+)`)
 
-	for _, match := range logMatches {
-		ip := match[0]         // IP address is stored at index 0
-		httpMethod := match[2] // HTTPMethod is stored at index 2
-		url := match[3]        // URL is stored at index 3
+	urlCount := make(map[string]int)
+	ipCount := make(map[string]int)
 
-		if !isValidHTTPMethod(httpMethod) {
-			continue // skip the current iteration as not a wanted HTTP method
+	for log := range logChan {
+		// Find matches in the log entry
+		matches := logRegex.FindStringSubmatch(log)
+
+		// Ensure the match is valid and has two groups
+		if len(matches) == 3 {
+			ip := matches[1]
+			url := matches[2]
+
+			urlCount[url]++
+			ipCount[ip]++
 		}
-
-		url = strings.Split(url, "?")[0] // remove query from URL before counting it
-
-		urlCounts.URLCounts[url]++
-		ipCounts.IPCounts[ip]++
 	}
 
-	return urlCounts, ipCounts
-}
+	urlCountChan <- urlCount
+	ipCountChan <- ipCount
 
-func isValidHTTPMethod(httpMethod string) bool {
-	validHTTPMethods := map[string]bool{
-		"GET":    true,
-		"PUT":    true,
-		"DELETE": true,
-		"POST":   true,
-		"HEAD":   true,
-	}
-	_, ok := validHTTPMethods[httpMethod]
-	return ok
+	close(urlCountChan)
+	close(ipCountChan)
 }
