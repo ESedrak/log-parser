@@ -12,12 +12,12 @@ Log Parser counts the unique IP addresses, top most requested URL's, and the mos
 GET, PUT, DELETE, POST, HEAD
 ```
 
-The number of requested URL's and most active IP addresses can be set by the requestedCountURL and requestCountIP. Currently - both are set to 3.
+The number of requested URL's and most active IP addresses can be set by the requestedNumURL and requestedNumIP. Currently - both are set to 3.
 
 The format of the logs will need to be in:
 
 ```text
-$client_ip - - \[$time_stamp\] "$http_method $request_path $_" $response_code $_ "-" "$user_agent"
+$client_ip $_...... "$http_method $request_path $_......
 ```
 
 E.g
@@ -27,6 +27,22 @@ E.g
 ```
 
 These logs are currently being stored and read from logs/log_file.log
+
+## Assumptions/Designs
+
+Initial Design
+
+- Log Parser will always be in the same format
+- Logs stored in logs/log_file.log
+- Will always want to ignore a query
+- HTTP methods wanted is `GET, PUT, DELETE, POST, HEAD`
+- Returns the exact number of requested numbers (default 3 for both URL's and IP's)
+- Loads up the entire file and parses it (can be improved by streaming as input)
+
+Design 2.0:
+
+- Improve regex by using: <https://regex101.com/>
+- Extend log file to open up more sources - i.e be passed in as a stream
 
 ## Dependencies
 
@@ -60,12 +76,6 @@ Run all tests:
 
 ```sh
 make test
-```
-
-Run benchmark tests:
-
-```sh
-make bench-all
 ```
 
 Remove all compiled executables instance

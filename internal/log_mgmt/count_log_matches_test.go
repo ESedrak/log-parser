@@ -1,65 +1,63 @@
 package log_mgmt
 
 import (
-	"log-parser/internal/ip_mgmt"
-	"log-parser/internal/url_mgmt"
 	"reflect"
 	"testing"
 )
 
 func TestCountLogMatchesIgnoresQuery(t *testing.T) {
-	type args struct {
-		logMatches [][]string
-	}
+	// reference: https://www.timothyomargheim.com/posts/testing-channels-in-go/
 	tests := []struct {
 		name  string
-		args  args
-		want  *url_mgmt.URLCounter
-		want1 *ip_mgmt.IPCounter
+		args  []string
+		want  map[string]int
+		want1 map[string]int
 	}{
 		{
-			name: "Success: test with multiple log matches",
-			args: args{
-				logMatches: [][]string{
-					{"192.168.1.1", "", "GET", "/example/"},
-					{"193.168.1.1", "", "GET", "/example/"},
-					{"192.168.1.1", "", "PUT", "/example/?query=true"},
-					{"192.168.1.1", "", "POST", "/example2/"},
-				},
+			name: "Success: log match",
+			args: []string{
+				"177.71.128.21 - - [10/Jul/2018:22:22:08 +0200] \"GET /blog/2018/08/survey-your-opinion-matters/ HTTP/1.1\" 200 3574 \"-\" \"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6\"",
 			},
-			want: &url_mgmt.URLCounter{
-				URLCounts: map[string]int{
-					"/example/":  3,
-					"/example2/": 1,
-				},
+			want: map[string]int{
+				"/blog/2018/08/survey-your-opinion-matters/": 1,
 			},
-			want1: &ip_mgmt.IPCounter{
-				IPCounts: map[string]int{
-					"192.168.1.1": 3,
-					"193.168.1.1": 1,
-				},
+			want1: map[string]int{
+				"177.71.128.21": 1,
 			},
 		},
 		{
 			name: "Success: unwanted HTTP method is not counted",
-			args: args{
-				logMatches: [][]string{
-					{"192.168.1.1", "", "PATCH", "/example/"},
-				},
+			args: []string{
+				"177.71.128.21 - - [10/Jul/2018:22:22:08 +0200] \"PATCH /blog/2018/08/survey-your-opinion-matters/ HTTP/1.1\" 200 3574 \"-\" \"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6\"",
 			},
-			want: &url_mgmt.URLCounter{
-				URLCounts: map[string]int{},
-			},
-			want1: &ip_mgmt.IPCounter{
-				IPCounts: map[string]int{},
-			},
+			want:  map[string]int{},
+			want1: map[string]int{},
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, got1 := CountLogMatchesIgnoresQuery(tt.args.logMatches)
+			// setup
+			urlCountChan := make(chan map[string]int)
+			ipCountChan := make(chan map[string]int)
+			logChan := make(chan string, len(tt.args))
+
+			// create a loop
+			for _, log := range tt.args {
+				logChan <- log
+			}
+			// close channel
+			close(logChan)
+
+			// execute
+			go CountLogMatchesIgnoresQuery(logChan, urlCountChan, ipCountChan)
+
+			// receive URL/IP counts
+			got := <-urlCountChan
+			got1 := <-ipCountChan
+
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("CountLogMatchesNoQuery() got = %v, want %v", got, tt.want)
+				t.Errorf("CountLogMatchesNoQuery() got = %v, expected %v", got, tt.want)
 			}
 			if !reflect.DeepEqual(got1, tt.want1) {
 				t.Errorf("CountLogMatchesNoQuery() got1 = %v, want %v", got1, tt.want1)
