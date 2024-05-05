@@ -1,6 +1,9 @@
 package log_mgmt
 
-import "regexp"
+import (
+	"log/slog"
+	"regexp"
+)
 
 /*
  * Function counts occurrences for the following HTTP methods: GET, PUT, DELETE, POST, HEAD.
@@ -14,16 +17,18 @@ func CountLogMatchesIgnoresQuery(logChan <-chan string, urlCountChan chan<- map[
 	ipCount := make(map[string]int)
 
 	for log := range logChan {
-		// Find matches in the log entry
+		// find matches in the log
 		matches := logRegex.FindStringSubmatch(log)
 
-		// Ensure the match is valid and has two groups
+		// if successful - will have 3 matches (full log and the two capture groups: ip and url)
 		if len(matches) == 3 {
 			ip := matches[1]
 			url := matches[2]
 
 			urlCount[url]++
 			ipCount[ip]++
+		} else {
+			slog.Warn("log not parsed", "ignoring", log)
 		}
 	}
 
