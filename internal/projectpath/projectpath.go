@@ -5,7 +5,6 @@ import (
 	"runtime"
 )
 
-// get current root of package structure
 var (
 	_, b, _, _ = runtime.Caller(0)
 

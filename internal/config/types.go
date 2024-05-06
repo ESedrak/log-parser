@@ -1,20 +1,20 @@
 package config
 
 type Config struct {
-	Limit Limit
-	Regex Regex
-	Path  Path
+	Limit Limit `json:"limit"`
+	Regex Regex `json:"regex"`
+	Path  Path  `json:"path"`
 }
 
 type Limit struct {
-	MaxIPs  int
-	MaxURLs int
+	MaxIPs  int `json:"maxIPs"`
+	MaxURLs int `json:"maxURLs"`
 }
 
 type Regex struct {
-	MatchIPsURlsIgnoreQuery string
+	MatchIPsURlsIgnoreQuery string `json:"matchIPsURLsIgnoreQuery"`
 }
 
 type Path struct {
-	FilePath string
+	LogPath string `json:"logpath"`
 }

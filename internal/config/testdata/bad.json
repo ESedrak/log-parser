@@ -1,0 +1,12 @@
+{
+  "limit": {
+      "maxIps": true,
+      "maxUrls": "no"
+  },
+  "regex": {
+      "matchIpsUrlsIgnoreQuery": 4
+  },
+  "path": {
+      "logpath": "logs/log_file.log"
+  }
+}

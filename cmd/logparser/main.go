@@ -19,7 +19,7 @@ func main() {
 	urlCountChan := make(chan map[string]int)
 	ipCountChan := make(chan map[string]int)
 
-	go log_mgmt.LoadLogs(cfg.Path.FilePath, logChan)
+	go log_mgmt.LoadLogs(cfg.Path.LogPath, logChan)
 
 	go log_mgmt.CountLogMatches(cfg.Regex.MatchIPsURlsIgnoreQuery, logChan, urlCountChan, ipCountChan)
 
