@@ -4,7 +4,7 @@
 
 ### High Level Design
 
-![docs/HLD.png](docs/HLD.png)
+![docs/images/log_parser_hld.png](docs/images/log_parser_hld.png)
 
 Log Parser counts the unique IP addresses, top most requested URL's, and the most active IP addresses for the following HTTP methods:
 

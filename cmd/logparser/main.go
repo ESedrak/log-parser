@@ -2,9 +2,9 @@ package main
 
 import (
 	"log-parser/internal/config"
-	"log-parser/internal/ip_mgmt"
-	"log-parser/internal/log_mgmt"
-	"log-parser/internal/url_mgmt"
+	"log-parser/internal/domain/ip_mgmt"
+	"log-parser/internal/domain/log_mgmt"
+	"log-parser/internal/domain/url_mgmt"
 	"log/slog"
 )
 
