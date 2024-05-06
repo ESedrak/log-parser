@@ -10,7 +10,7 @@ func init() {
 	config.Init("/config/config.json")
 }
 
-func TestCountLogMatchesIgnoresQuery(t *testing.T) {
+func TestCountLogMatches(t *testing.T) {
 	// reference: https://www.timothyomargheim.com/posts/testing-channels-in-go/
 	tests := []struct {
 		name  string
