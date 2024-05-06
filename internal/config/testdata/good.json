@@ -1,0 +1,12 @@
+{
+  "limit": {
+      "maxIps": 3,
+      "maxUrls": 3
+  },
+  "regex": {
+      "matchIpsUrlsIgnoreQuery": "(\\d+\\.\\d+\\.\\d+\\.\\d+).+(?:GET|POST|PUT|DELETE|HEAD)\\s([^ ?]+)"
+  },
+  "path": {
+      "logpath": "logs/log_file.log"
+  }
+}
