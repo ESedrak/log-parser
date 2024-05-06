@@ -7,10 +7,10 @@ import (
 )
 
 /*
- *  Function reads log entries one line at a time and sends them through a log channel for concurrent processing
+ *  Function reads logs one at a time and sends them through a log channel for concurrent processing
  */
-func LoadLogs(filename string, logChan chan<- string) {
-	file, err := os.Open(filename)
+func LoadLogs(filePath string, logChan chan<- string) {
+	file, err := os.Open(filePath)
 	if err != nil {
 		slog.Error("file", "error", err)
 	}

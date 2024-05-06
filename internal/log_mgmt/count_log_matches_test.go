@@ -1,9 +1,14 @@
 package log_mgmt
 
 import (
+	"log-parser/internal/config"
 	"reflect"
 	"testing"
 )
+
+func init() {
+	config.Init("/config/config.json")
+}
 
 func TestCountLogMatchesIgnoresQuery(t *testing.T) {
 	// reference: https://www.timothyomargheim.com/posts/testing-channels-in-go/
@@ -26,7 +31,7 @@ func TestCountLogMatchesIgnoresQuery(t *testing.T) {
 			},
 		},
 		{
-			name: "Success: unwanted HTTP method is not counted",
+			name: "Warn: unwanted HTTP method is not counted/log not parsed",
 			args: []string{
 				"177.71.128.21 - - [10/Jul/2018:22:22:08 +0200] \"PATCH /blog/2018/08/survey-your-opinion-matters/ HTTP/1.1\" 200 3574 \"-\" \"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6\"",
 			},
@@ -38,6 +43,7 @@ func TestCountLogMatchesIgnoresQuery(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// setup
+			cfg := config.Values
 			urlCountChan := make(chan map[string]int)
 			ipCountChan := make(chan map[string]int)
 			logChan := make(chan string, len(tt.args))
@@ -50,7 +56,7 @@ func TestCountLogMatchesIgnoresQuery(t *testing.T) {
 			close(logChan)
 
 			// execute
-			go CountLogMatchesIgnoresQuery(logChan, urlCountChan, ipCountChan)
+			go CountLogMatches(cfg.Regex.MatchIPsURlsIgnoreQuery, logChan, urlCountChan, ipCountChan)
 
 			// receive URL/IP counts
 			got := <-urlCountChan

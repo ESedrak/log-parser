@@ -9,9 +9,9 @@ import (
  * Function counts occurrences for the following HTTP methods: GET, PUT, DELETE, POST, HEAD.
  * Counts each unique IP address and URL(ignores queries)
  */
-func CountLogMatchesIgnoresQuery(logChan <-chan string, urlCountChan chan<- map[string]int, ipCountChan chan<- map[string]int) {
+func CountLogMatches(regex string, logChan <-chan string, urlCountChan chan<- map[string]int, ipCountChan chan<- map[string]int) {
 	// match the IP address and URL(ignore query). Used https://regex101.com/.
-	logRegex := regexp.MustCompile(`(\d+\.\d+\.\d+\.\d+).+(?:GET|POST|PUT|DELETE|HEAD)\s([^ ?]+)`)
+	logRegex := regexp.MustCompile(regex)
 
 	urlCount := make(map[string]int)
 	ipCount := make(map[string]int)

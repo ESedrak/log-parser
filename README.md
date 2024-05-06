@@ -12,7 +12,15 @@ Log Parser counts the unique IP addresses, top most requested URL's, and the mos
 GET, PUT, DELETE, POST, HEAD
 ```
 
-The number of requested URL's and most active IP addresses can be set by the requestedNumURL and requestedNumIP. Currently - both are set to 3.
+[Config](config/config.json) can be configured with different inputs.
+Currently:
+
+- the max number of requested IPs/URLs to return
+  - both are set to 3
+- regex pattern to match
+  - only matches IP's and URLS(ignore queries) with the above HTTP methods
+- File path to the logs
+  - logs/log_file.log
 
 The format of the logs will need to be in:
 
@@ -25,8 +33,6 @@ E.g
 ```text
 177.71.128.21 - - [10/Jul/2018:22:22:08 +0200] "GET /blog/2018/08/survey-your-opinion-matters/ HTTP/1.1" 200 3574 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6"
 ```
-
-These logs are currently being stored and read from logs/log_file.log
 
 ## Assumptions/Designs
 
