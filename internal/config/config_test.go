@@ -32,7 +32,7 @@ func Test_loadConfig(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "unmarshal bad yaml",
+			name: "unmarshal bad json",
 			args: args{
 				filePath: "internal/config/testdata/bad.json",
 			},

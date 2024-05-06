@@ -12,7 +12,7 @@
 
 ## Testing?
 
-<!-- Explain if/what you have done to test the made -->
+<!-- Explain if/what you have done to test the changes made -->
 
 ## Examples (optional)
 
