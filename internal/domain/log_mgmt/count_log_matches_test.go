@@ -48,15 +48,15 @@ func TestCountLogMatches(t *testing.T) {
 			ipCountChan := make(chan map[string]int)
 			logChan := make(chan string, len(tt.args))
 
+			// execute
+			go CountLogMatches(cfg.Regex.MatchIPsURlsIgnoreQuery, logChan, urlCountChan, ipCountChan)
+
 			// create a loop
 			for _, log := range tt.args {
 				logChan <- log
 			}
 			// close channel
 			close(logChan)
-
-			// execute
-			go CountLogMatches(cfg.Regex.MatchIPsURlsIgnoreQuery, logChan, urlCountChan, ipCountChan)
 
 			// receive URL/IP counts
 			got := <-urlCountChan
