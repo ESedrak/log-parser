@@ -19,7 +19,7 @@ tidy:
 
 .PHONY: test
 test:
-	go test ./internal/...
+	go test -v ./internal/...
 
 .PHONY: bench-all
 bench-all: 
