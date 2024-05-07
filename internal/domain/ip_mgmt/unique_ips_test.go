@@ -1,15 +1,19 @@
 package ip_mgmt
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestUniqueIPs(t *testing.T) {
 	type args struct {
 		ipCounts map[string]int
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
+		name    string
+		args    args
+		want    int
+		wantErr bool
 	}{
 		{
 			name: "Success: return the number of unique IPs",
@@ -22,12 +26,26 @@ func TestUniqueIPs(t *testing.T) {
 					"168.41.191.9": 1,
 				},
 			},
-			want: 5,
+			want:    5,
+			wantErr: false,
+		},
+		{
+			name: "Error: no IP's found",
+			args: args{
+				ipCounts: map[string]int{},
+			},
+			want:    0,
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := UniqueIPs(tt.args.ipCounts); got != tt.want {
+			got, err := UniqueIPs(tt.args.ipCounts)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UniqueIPs() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("UniqueIPs() = %v, want %v", got, tt.want)
 			}
 		})
