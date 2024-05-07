@@ -10,6 +10,9 @@ import (
  * Counts each unique IP address and URL(ignores queries)
  */
 func CountLogMatches(regex string, logChan <-chan string, urlCountChan chan<- map[string]int, ipCountChan chan<- map[string]int) {
+	defer close(urlCountChan)
+	defer close(ipCountChan)
+
 	// match the IP address and URL(ignore query). Used https://regex101.com/.
 	logRegex := regexp.MustCompile(regex)
 
@@ -34,7 +37,4 @@ func CountLogMatches(regex string, logChan <-chan string, urlCountChan chan<- ma
 
 	urlCountChan <- urlCount
 	ipCountChan <- ipCount
-
-	close(urlCountChan)
-	close(ipCountChan)
 }

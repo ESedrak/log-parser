@@ -2,17 +2,20 @@ package log_mgmt
 
 import (
 	"bufio"
-	"log/slog"
 	"os"
 )
 
 /*
  *  Function reads logs one at a time and sends them through a log channel for concurrent processing
  */
-func LoadLogs(filePath string, logChan chan<- string) {
+func LoadLogs(filePath string, logChan chan<- string, errChan chan<- error) {
+	defer close(logChan)
+	defer close(errChan)
+
 	file, err := os.Open(filePath)
 	if err != nil {
-		slog.Error("file", "error", err)
+		errChan <- err
+		return
 	}
 	defer file.Close()
 
@@ -22,8 +25,7 @@ func LoadLogs(filePath string, logChan chan<- string) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		slog.Error("scanner", "error", err)
+		errChan <- err
+		return
 	}
-
-	close(logChan)
 }
