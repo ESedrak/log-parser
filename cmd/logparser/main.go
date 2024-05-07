@@ -6,36 +6,25 @@ import (
 	"log-parser/internal/domain/log_mgmt"
 	"log-parser/internal/domain/url_mgmt"
 	"log/slog"
-	"sync"
 )
 
 func init() {
 	config.Init("config/config.json")
 }
 
-var wg sync.WaitGroup
-
 func main() {
 	cfg := config.Values
-
-	wg.Add(2)
 
 	logChan := make(chan string)
 	errChan := make(chan error)
 	urlCountChan := make(chan map[string]int)
 	ipCountChan := make(chan map[string]int)
 
-	go func() {
-		defer wg.Done()
-		log_mgmt.LoadLogs(cfg.Path.LogPath, logChan, errChan)
-	}()
+	go log_mgmt.LoadLogs(cfg.Path.LogPath, logChan, errChan)
 
-	go func() {
-		defer wg.Done()
-		log_mgmt.CountLogMatches(cfg.Regex.MatchIPsURlsIgnoreQuery, logChan, urlCountChan, ipCountChan)
-	}()
+	go log_mgmt.CountLogMatches(cfg.Regex.MatchIPsURlsIgnoreQuery, logChan, urlCountChan, ipCountChan)
 
-	// receive errors - if there was any error loading or reading the file. Return.
+	// receive errors and return if there were any errors loading or reading the file.
 	err := <-errChan
 	if err != nil {
 		slog.Error("error", "err", err)
@@ -47,8 +36,6 @@ func main() {
 
 	// receive IP counts
 	ipCount := <-ipCountChan
-
-	wg.Wait()
 
 	uniqueIPs, err := ip_mgmt.UniqueIPs(ipCount)
 
