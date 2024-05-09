@@ -1,9 +1,10 @@
 package url_mgmt
 
 import (
+	"cmp"
 	"errors"
 	"log/slog"
-	"sort"
+	"slices"
 )
 
 type URLCount struct {
@@ -27,9 +28,13 @@ func TopRequestedURLs(urlCounts map[string]int, requestedNum int) ([]URLCount, e
 		urlCount = append(urlCount, URLCount{URL: url, Count: count})
 	}
 
-	// sort the slice by counts in descending order
-	sort.Slice(urlCount, func(i, j int) bool {
-		return urlCount[j].Count < urlCount[i].Count
+	//sort the slice by counts in descending order
+	slices.SortStableFunc(urlCount, func(a, b URLCount) int {
+		if n := cmp.Compare(b.Count, a.Count); n != 0 {
+			return n
+		}
+		// If counts are equal, order by URL (in ascending order)
+		return cmp.Compare(a.URL, b.URL)
 	})
 
 	if len(urlCount) < requestedNum {

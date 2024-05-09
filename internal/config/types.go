@@ -1,14 +1,14 @@
 package config
 
 type Config struct {
-	Limit Limit `json:"limit"`
-	Regex Regex `json:"regex"`
-	Path  Path  `json:"path"`
+	RequestedNum RequestedNum `json:"requestedNum"`
+	Regex        Regex        `json:"regex"`
+	Path         Path         `json:"path"`
 }
 
-type Limit struct {
-	MaxIPs  int `json:"maxIPs"`
-	MaxURLs int `json:"maxURLs"`
+type RequestedNum struct {
+	IP  int `json:"ip"`
+	URL int `json:"url"`
 }
 
 type Regex struct {

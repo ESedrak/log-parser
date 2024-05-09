@@ -1,9 +1,10 @@
 package ip_mgmt
 
 import (
+	"cmp"
 	"errors"
 	"log/slog"
-	"sort"
+	"slices"
 )
 
 type IPCount struct {
@@ -27,9 +28,13 @@ func MostActiveIP(ipCounts map[string]int, requestedNum int) ([]IPCount, error) 
 		ipCount = append(ipCount, IPCount{IP: ip, Count: count})
 	}
 
-	// sort the IPCount pairs based on count
-	sort.Slice(ipCount, func(i, j int) bool {
-		return ipCount[j].Count < ipCount[i].Count
+	//sort the slice by counts in descending order
+	slices.SortStableFunc(ipCount, func(a, b IPCount) int {
+		if n := cmp.Compare(b.Count, a.Count); n != 0 {
+			return n
+		}
+		// If counts are equal, order by IP (in ascending order)
+		return cmp.Compare(a.IP, b.IP)
 	})
 
 	if len(ipCount) < requestedNum {

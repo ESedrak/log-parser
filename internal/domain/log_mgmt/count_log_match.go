@@ -7,9 +7,9 @@ import (
 
 /*
  * Function counts occurrences for the following HTTP methods: GET, PUT, DELETE, POST, HEAD.
- * Counts each unique IP address and URL(ignores queries)
+ * Count each log match for unique IP address and URL(ignores queries)
  */
-func CountLogMatches(regex string, logChan <-chan string, urlCountChan chan<- map[string]int, ipCountChan chan<- map[string]int) {
+func CountLogMatch(regex string, logChan <-chan string, urlCountChan chan<- map[string]int, ipCountChan chan<- map[string]int) {
 	defer close(urlCountChan)
 	defer close(ipCountChan)
 

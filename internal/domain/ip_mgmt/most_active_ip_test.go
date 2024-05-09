@@ -32,6 +32,21 @@ func TestMostActiveIP(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name: "Success: return top 3 IPs with same count by IP number",
+			args: args{
+				ipCounts: map[string]int{
+					"172.41.191.9": 1,
+					"169.41.191.9": 1,
+					"170.41.191.9": 1,
+					"171.41.191.9": 1,
+					"168.41.191.9": 1,
+				},
+				requestedNum: 3,
+			},
+			want:    []IPCount{{IP: "168.41.191.9", Count: 1}, {IP: "169.41.191.9", Count: 1}, {IP: "170.41.191.9", Count: 1}},
+			wantErr: false,
+		},
+		{
 			name: "Error: requestCount less than one",
 			args: args{
 				ipCounts: map[string]int{
