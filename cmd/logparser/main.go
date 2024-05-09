@@ -22,7 +22,7 @@ func main() {
 
 	go log_mgmt.LoadLogs(cfg.Path.LogPath, logChan, errChan)
 
-	go log_mgmt.CountLogMatches(cfg.Regex.MatchIPsURlsIgnoreQuery, logChan, urlCountChan, ipCountChan)
+	go log_mgmt.CountLogMatch(cfg.Regex.MatchIPsURlsIgnoreQuery, logChan, urlCountChan, ipCountChan)
 
 	// receive errors and return if there were any errors loading or reading the file.
 	err := <-errChan
@@ -44,14 +44,14 @@ func main() {
 		return
 	}
 
-	mostActiveIPs, err := ip_mgmt.MostActiveIP(ipCount, cfg.Limit.MaxIPs)
+	mostActiveIPs, err := ip_mgmt.MostActiveIP(ipCount, cfg.RequestedNum.IP)
 
 	if err != nil {
 		slog.Error("mostActiveIPs", "error", err)
 		return
 	}
 
-	topRequestedURLs, err := url_mgmt.TopRequestedURLs(urlCount, cfg.Limit.MaxURLs)
+	topRequestedURLs, err := url_mgmt.TopRequestedURLs(urlCount, cfg.RequestedNum.URL)
 
 	if err != nil {
 		slog.Error("topRequestedURLs", "error", err)

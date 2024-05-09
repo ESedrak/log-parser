@@ -1,7 +1,7 @@
 {
-  "limit": {
-      "maxIps": 3,
-      "maxUrls": 3
+  "requestedNum": {
+      "ip": 3,
+      "url": 3
   },
   "regex": {
       "matchIpsUrlsIgnoreQuery": "(\\d+\\.\\d+\\.\\d+\\.\\d+).+(?:GET|POST|PUT|DELETE|HEAD)\\s([^ ?]+)"

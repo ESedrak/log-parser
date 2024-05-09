@@ -10,7 +10,7 @@ func init() {
 	config.Init("/config/config.json")
 }
 
-func TestCountLogMatches(t *testing.T) {
+func TestCountLogMatch(t *testing.T) {
 	// reference: https://www.timothyomargheim.com/posts/testing-channels-in-go/
 	tests := []struct {
 		name  string
@@ -49,7 +49,7 @@ func TestCountLogMatches(t *testing.T) {
 			logChan := make(chan string, len(tt.args))
 
 			// execute
-			go CountLogMatches(cfg.Regex.MatchIPsURlsIgnoreQuery, logChan, urlCountChan, ipCountChan)
+			go CountLogMatch(cfg.Regex.MatchIPsURlsIgnoreQuery, logChan, urlCountChan, ipCountChan)
 
 			// create a loop
 			for _, log := range tt.args {

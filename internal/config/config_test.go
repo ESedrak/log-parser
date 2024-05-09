@@ -56,9 +56,9 @@ func Test_loadConfig(t *testing.T) {
 
 func getExpectedConfig() Config {
 	return Config{
-		Limit: Limit{
-			MaxIPs:  3,
-			MaxURLs: 3,
+		RequestedNum: RequestedNum{
+			IP:  3,
+			URL: 3,
 		},
 		Regex: Regex{
 			MatchIPsURlsIgnoreQuery: "(\\d+\\.\\d+\\.\\d+\\.\\d+).+(?:GET|POST|PUT|DELETE|HEAD)\\s([^ ?]+)",

@@ -1,7 +1,7 @@
 {
-  "limit": {
-      "maxIps": true,
-      "maxUrls": "no"
+  "requestedNum": {
+      "ip": true,
+      "url": "no"
   },
   "regex": {
       "matchIpsUrlsIgnoreQuery": 4
