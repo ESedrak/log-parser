@@ -36,6 +36,25 @@ func TestTopRequestedURLs(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name: "Success: return top 3 URLs with same count by URL name",
+			args: args{
+				urlCounts: map[string]int{
+					"/page4": 1,
+					"/page1": 1,
+					"/page2": 1,
+					"/page3": 1,
+					"/page5": 1,
+				},
+				requestedNum: 3,
+			},
+			want: []URLCount{
+				{URL: "/page1", Count: 1},
+				{URL: "/page2", Count: 1},
+				{URL: "/page3", Count: 1},
+			},
+			wantErr: false,
+		},
+		{
 			name: "Error: requestCount less than one",
 			args: args{
 				urlCounts: map[string]int{
