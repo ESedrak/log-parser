@@ -1,40 +1,36 @@
 package config
 
 import (
-	"encoding/json"
-	"log-parser/internal/projectpath"
 	"log/slog"
 	"os"
+
+	"github.com/spf13/viper"
 )
 
 var Values Config
 
-func Init(filePath string) {
+func Init(path, fileName, format string) {
 	var err error
 
-	Values, err = loadConfig(filePath)
+	Values, err = loadConfig(path, fileName, format)
 	if err != nil {
 		slog.Error("error", "err", err)
 		os.Exit(1)
 	}
 }
 
-func loadConfig(filePath string) (Config, error) {
-	rootPath := projectpath.Root
-
-	//open up absolute path to the config file
-	file, err := os.Open(rootPath + "/" + filePath)
-
-	if err != nil {
+func loadConfig(path, fileName, format string) (Config, error) {
+	viper.SetConfigName(fileName) // name of config file (without extension)
+	viper.SetConfigType(format)   // REQUIRED if the config file does not have the extension in the name
+	viper.AddConfigPath(path)     // path to look for the config file in
+	if err := viper.ReadInConfig(); err != nil {
 		return Config{}, err
 	}
-	defer file.Close()
 
 	var config Config
-
-	decoder := json.NewDecoder(file)
-	if err := decoder.Decode(&config); err != nil {
+	if err := viper.Unmarshal(&config); err != nil {
 		return Config{}, err
 	}
+
 	return config, nil
 }

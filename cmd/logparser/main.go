@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	config.Init("config/config.json")
+	config.Init("./config", "config", "json")
 }
 
 func main() {

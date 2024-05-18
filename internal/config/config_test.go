@@ -7,7 +7,9 @@ import (
 
 func Test_loadConfig(t *testing.T) {
 	type args struct {
-		filePath string
+		path     string
+		fileName string
+		format   string
 	}
 	tests := []struct {
 		name    string
@@ -18,7 +20,9 @@ func Test_loadConfig(t *testing.T) {
 		{
 			name: "Success scenario",
 			args: args{
-				filePath: "internal/config/testdata/good.json",
+				path:     "testdata",
+				fileName: "good",
+				format:   "json",
 			},
 			want:    getExpectedConfig(),
 			wantErr: false,
@@ -26,7 +30,9 @@ func Test_loadConfig(t *testing.T) {
 		{
 			name: "read config error",
 			args: args{
-				filePath: "wrong",
+				path:     "testdata",
+				fileName: "wrong",
+				format:   "json",
 			},
 			want:    Config{},
 			wantErr: true,
@@ -34,7 +40,9 @@ func Test_loadConfig(t *testing.T) {
 		{
 			name: "unmarshal bad json",
 			args: args{
-				filePath: "internal/config/testdata/bad.json",
+				path:     "testdata",
+				fileName: "bad",
+				format:   "json",
 			},
 			want:    Config{},
 			wantErr: true,
@@ -42,7 +50,7 @@ func Test_loadConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := loadConfig(tt.args.filePath)
+			got, err := loadConfig(tt.args.path, tt.args.fileName, tt.args.format)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("loadConfig() error = %v, wantErr %v", err, tt.wantErr)
 				return
