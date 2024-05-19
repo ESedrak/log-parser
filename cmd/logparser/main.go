@@ -22,7 +22,7 @@ func main() {
 
 	go log_mgmt.LoadLogs(cfg.Path.LogPath, logChan, errChan)
 
-	go log_mgmt.CountLogMatch(cfg.Regex.MatchIPsURlsIgnoreQuery, logChan, urlCountChan, ipCountChan)
+	go log_mgmt.CountLogMatch(cfg.Regex.MatchIPsURLsIgnoreQuery, logChan, urlCountChan, ipCountChan)
 
 	// receive errors and return if there were any errors loading or reading the file.
 	err := <-errChan

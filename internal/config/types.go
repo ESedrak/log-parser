@@ -12,7 +12,7 @@ type RequestedNum struct {
 }
 
 type Regex struct {
-	MatchIPsURlsIgnoreQuery string `json:"matchIPsURLsIgnoreQuery"`
+	MatchIPsURLsIgnoreQuery string `json:"matchIPsURLsIgnoreQuery"`
 }
 
 type Path struct {
