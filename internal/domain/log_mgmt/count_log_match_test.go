@@ -49,7 +49,7 @@ func TestCountLogMatch(t *testing.T) {
 			logChan := make(chan string, len(tt.args))
 
 			// execute
-			go CountLogMatch(cfg.Regex.MatchIPsURlsIgnoreQuery, logChan, urlCountChan, ipCountChan)
+			go CountLogMatch(cfg.Regex.MatchIPsURLsIgnoreQuery, logChan, urlCountChan, ipCountChan)
 
 			// create a loop
 			for _, log := range tt.args {

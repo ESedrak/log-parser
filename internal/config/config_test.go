@@ -61,7 +61,7 @@ func getExpectedConfig() Config {
 			URL: 3,
 		},
 		Regex: Regex{
-			MatchIPsURlsIgnoreQuery: "(\\d+\\.\\d+\\.\\d+\\.\\d+).+(?:GET|POST|PUT|DELETE|HEAD)\\s([^ ?]+)",
+			MatchIPsURLsIgnoreQuery: "(\\d+\\.\\d+\\.\\d+\\.\\d+).+(?:GET|POST|PUT|DELETE|HEAD)\\s([^ ?]+)",
 		},
 		Path: Path{
 			LogPath: "logs/log_file.log",

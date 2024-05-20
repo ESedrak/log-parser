@@ -6,14 +6,13 @@ import (
 )
 
 /*
- * Function counts occurrences for the following HTTP methods: GET, PUT, DELETE, POST, HEAD.
- * Count each log match for unique IP address and URL(ignores queries)
+ * Count each log match based on the given regex (used https://regex101.com/)
+ * Default regex: captures IP and URL(ignores any query) for HTTP methods: GET, PUT, DELETE, POST, HEAD
  */
 func CountLogMatch(regex string, logChan <-chan string, urlCountChan chan<- map[string]int, ipCountChan chan<- map[string]int) {
 	defer close(urlCountChan)
 	defer close(ipCountChan)
 
-	// match the IP address and URL(ignore query). Used https://regex101.com/.
 	logRegex := regexp.MustCompile(regex)
 
 	urlCount := make(map[string]int)
@@ -30,6 +29,8 @@ func CountLogMatch(regex string, logChan <-chan string, urlCountChan chan<- map[
 
 			urlCount[url]++
 			ipCount[ip]++
+
+			slog.Info("log parsed successfully", "IP", ip, "URL", url)
 		} else {
 			slog.Warn("log not parsed", "ignoring", log)
 		}
