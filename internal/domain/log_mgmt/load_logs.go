@@ -6,7 +6,7 @@ import (
 )
 
 /*
- *  Function reads logs one at a time and sends them through a log channel for concurrent processing
+ *  Reads log file one line at a time and sends each line to a log channel for concurrent processing
  */
 func LoadLogs(filePath string, logChan chan<- string, errChan chan<- error) {
 	defer close(logChan)
