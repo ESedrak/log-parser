@@ -1,11 +1,12 @@
 package main
 
 import (
+	"log-parser/internal/cli"
 	"log-parser/internal/config"
-	"log-parser/internal/domain/ip_mgmt"
 	"log-parser/internal/domain/log_mgmt"
-	"log-parser/internal/domain/url_mgmt"
 	"log/slog"
+
+	"github.com/spf13/cobra"
 )
 
 func init() {
@@ -37,28 +38,7 @@ func main() {
 	// receive IP counts
 	ipCount := <-ipCountChan
 
-	uniqueIPs, err := ip_mgmt.UniqueIPs(ipCount)
+	rootCmd := cli.New(ipCount, urlCount)
 
-	if err != nil {
-		slog.Error("uniqueIPs", "error", err)
-		return
-	}
-
-	mostActiveIPs, err := ip_mgmt.MostActiveIP(ipCount, cfg.RequestedNum.IP)
-
-	if err != nil {
-		slog.Error("mostActiveIPs", "error", err)
-		return
-	}
-
-	topRequestedURLs, err := url_mgmt.TopRequestedURLs(urlCount, cfg.RequestedNum.URL)
-
-	if err != nil {
-		slog.Error("topRequestedURLs", "error", err)
-		return
-	}
-
-	slog.Info("Unique IPs Count", "IPs", uniqueIPs)
-	slog.Info("Most Active IPs: ", "IPs", mostActiveIPs)
-	slog.Info("Top Requested URLs:", "URLs", topRequestedURLs)
+	cobra.CheckErr(rootCmd.Execute())
 }
