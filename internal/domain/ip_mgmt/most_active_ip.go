@@ -38,7 +38,7 @@ func MostActiveIP(ipCounts map[string]int, requestedNum int) ([]IPCount, error) 
 	})
 
 	if len(ipCount) < requestedNum {
-		slog.Warn("requested number is less than the number of unique IPs: returning the maximum possible amount")
+		slog.Warn("requested number exceeds the number of unique IPs: returning the maximum possible amount")
 		return ipCount, nil
 	}
 

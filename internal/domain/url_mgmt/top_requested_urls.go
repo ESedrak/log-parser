@@ -38,7 +38,7 @@ func TopRequestedURLs(urlCounts map[string]int, requestedNum int) ([]URLCount, e
 	})
 
 	if len(urlCount) < requestedNum {
-		slog.Warn("requested number is less than the number of unique URLs: returning the maximum possible amount")
+		slog.Warn("requested number exceeds the the number of unique URLs: returning the maximum possible amount")
 		return urlCount, nil
 	}
 
