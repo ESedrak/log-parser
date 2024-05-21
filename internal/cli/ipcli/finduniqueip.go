@@ -9,7 +9,7 @@ import (
 
 func newFindUniqueIP(ipCount map[string]int) *cobra.Command {
 	ipFindActiveCmd := &cobra.Command{
-		Use:   "find the number of unique IPs",
+		Use:   "unique",
 		Short: "Find the number of unique IPs",
 		Long:  "Find the number of unique IPs within a log file",
 		Args:  cobra.ExactArgs(0),

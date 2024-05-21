@@ -10,7 +10,7 @@ import (
 
 func newFindMostActiveIP(ipCount map[string]int) *cobra.Command {
 	ipFindActiveCmd := &cobra.Command{
-		Use:   "find the most active IP",
+		Use:   "active",
 		Short: "Find the most active IP",
 		Long:  "Find the most active IP. \nRequested number of results is a required argument.",
 		Args:  cobra.ExactArgs(1),

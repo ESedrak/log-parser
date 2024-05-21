@@ -10,7 +10,7 @@ import (
 
 func newFindTopRequestedURLs(urlCount map[string]int) *cobra.Command {
 	urlFindTopRequestedCmd := &cobra.Command{
-		Use:   "find the top requested URLs",
+		Use:   "top",
 		Short: "Find the top requested URLs",
 		Long:  "Find the top requested URLs. \nRequested number of results is a required argument.",
 		Args:  cobra.ExactArgs(1),
