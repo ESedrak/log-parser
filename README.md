@@ -28,7 +28,7 @@ The format of the logs will need to be in:
 $ip_address ......... $http_method $url_path
 ```
 
-- Note: the default regex pattern captures the IP and  (but the http_method is a non-capturing group)
+- Note: the default regex pattern captures the IP and URL (but the http_method is a non-capturing group)
 
 E.g
 
@@ -61,9 +61,10 @@ Future Design Possibilities:
 - Use batch workers for handling counting of logs. Example scenarios:
   - Wait for 10 logs before the log is matched and counted (currently one log is being matched and counted at a time)
   - Schedule the logs to be counted such as every hour
-- Use golang's popular packages - cobra and viper:
+- Use golang's popular packages - cobra and viper (and potentially promptui):
   - cobra: for building CLI
-  - viper: for config loading (easily be able to override default settings and is supported by many types ot files: JSON, TOML, YAML, ENV)
+  - viper: for config loading (easily be able to override default settings and is supported by many types of files: JSON, TOML, YAML, ENV)
+  - promptui: create command-line prompts for user input
 
 ## Dependencies
 
