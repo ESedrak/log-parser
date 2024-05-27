@@ -1,3 +1,6 @@
+IP_COUNT ?= 3
+URL_COUNT ?= 3
+
 .PHONY: all
 all: tidy build test
 
@@ -9,9 +12,37 @@ clean:
 build:
 	go build -o ./app/logparser ./cmd/logparser/main.go
 
-.PHONY: run
-run: 
-	./app/logparser
+.PHONY: run-all 
+run-all: 
+	./app/logparser and -- url top $(URL_COUNT) - ip active $(IP_COUNT) - ip unique
+
+.PHONY: run-ip
+run-ip: 
+	./app/logparser and -- ip active $(IP_COUNT) - ip unique
+
+.PHONY: run-ip-active 
+run-ip-count: 
+	@echo "Usage: make run-ip IP_COUNT=<number>"
+	./app/logparser and -- ip active $(IP_COUNT)
+
+.PHONY: run-ip-unique 
+run-ip-unique: 
+	./app/logparser and -- ip unique
+
+.PHONY: run-url-top
+run-url-top: 
+	@echo "Usage: make run-url URL_COUNT=<number>"
+	./app/logparser and -- url top $(URL_COUNT)
+
+.PHONY: run-counts
+run-counts: 
+	@echo "Usage: make run-url URL_COUNT=<number>"
+	./app/logparser and -- ip active $(IP_COUNT) - url top $(URL_COUNT)
+
+.PHONY: run-help
+run-help: 
+	@echo "Usage: make run-ip IP_COUNT=<number>"
+	./app/logparser and --help
 
 .PHONY: tidy
 tidy:

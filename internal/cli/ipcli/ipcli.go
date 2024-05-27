@@ -2,14 +2,17 @@ package ipcli
 
 import "github.com/spf13/cobra"
 
-func NewIP(ipCount map[string]int) *cobra.Command {
+var ipCounts map[string]int
+
+func NewIPCmd(ipCount map[string]int) *cobra.Command {
+	ipCounts = ipCount
 	var ipCmd = &cobra.Command{
 		Use:   "ip",
 		Short: "IP related commands",
 		Long:  "IP related commands",
 	}
 
-	ipCmd.AddCommand(newFindMostActiveIP(ipCount), newFindUniqueIP(ipCount))
+	ipCmd.AddCommand(newFindMostActiveIP(), newFindUniqueIP())
 
 	return ipCmd
 }

@@ -7,23 +7,23 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newFindUniqueIP(ipCount map[string]int) *cobra.Command {
+func newFindUniqueIP() *cobra.Command {
 	ipFindActiveCmd := &cobra.Command{
 		Use:   "unique",
 		Short: "Find the number of unique IPs",
 		Long:  "Find the number of unique IPs within a log file",
 		Args:  cobra.ExactArgs(0),
 		Run: func(cmd *cobra.Command, args []string) {
-			findUniquIP(ipCount)
+			findUniquIP()
 		},
 	}
 
 	return ipFindActiveCmd
 }
 
-func findUniquIP(ipCount map[string]int) {
+func findUniquIP() {
 
-	result, err := ip_mgmt.UniqueIPs(ipCount)
+	result, err := ip_mgmt.UniqueIPs(ipCounts)
 	cobra.CheckErr(err)
 
 	slog.Info("Unique IPs Count", "IPs", result)
