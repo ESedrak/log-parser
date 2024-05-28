@@ -10,15 +10,19 @@ clean:
 
 .PHONY: build
 build:
-	go build -o ./app/logparser ./cmd/logparser/main.go
+	go build -o ./app/logparser ./cmd/logparser/main.
+	
+.PHONY: run
+run: 
+	./app/logparser
 
 .PHONY: run-all 
 run-all: 
-	./app/logparser log -- url top $(URL_COUNT) - ip active $(IP_COUNT) - ip unique
+	./app/logparser log -- ip unique - ip active $(IP_COUNT) - url top $(URL_COUNT)
 
 .PHONY: run-ip
 run-ip: 
-	./app/logparser log -- ip active $(IP_COUNT) - ip unique
+	./app/logparser log -- ip unique - ip active $(IP_COUNT)
 
 .PHONY: run-ip-active 
 run-ip-active: 

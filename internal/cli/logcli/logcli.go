@@ -14,16 +14,13 @@ var urlCounts map[string]int
 func NewLogCmd(logPath string, regex string) *cobra.Command {
 
 	var logCmd = &cobra.Command{
-		Use:   "log -- ip active $(IP_COUNT) - ip unique - url top $(URL_COUNT)",
+		Use:   "log -- ip unique - ip active $(IP_COUNT) - url top $(URL_COUNT)",
 		Short: "run multiple IP/URL commands separated by -",
 		Long:  "Load Logs, Counts Log Matches, and can run multiple IP/URL commands separated by -",
 		// Call the logHandlerFn to LoadLogs/CountLogMatches
-		RunE: func(cobraCmd *cobra.Command, args []string) error {
+		Run: func(cobraCmd *cobra.Command, args []string) {
 			err := logHandlerFn(logPath, regex)
-			if err != nil {
-				return err
-			}
-			return nil
+			cobra.CheckErr(err)
 		},
 		// After logs loaded/counted - add ability to invoke one or multiple subcommands for IP/URLs i.e: ./app/logparser log -- command1 - command2 - command3
 		PostRun: func(cobraCmd *cobra.Command, args []string) {
