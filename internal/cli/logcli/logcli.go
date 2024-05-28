@@ -4,7 +4,6 @@ import (
 	"log-parser/internal/cli/ipcli"
 	"log-parser/internal/cli/urlcli"
 	"log-parser/internal/domain/log_mgmt"
-	"log/slog"
 
 	"github.com/spf13/cobra"
 )
@@ -19,8 +18,12 @@ func NewLogCmd(logPath string, regex string) *cobra.Command {
 		Short: "run multiple IP/URL commands separated by -",
 		Long:  "Load Logs, Counts Log Matches, and can run multiple IP/URL commands separated by -",
 		// Call the logHandlerFn to LoadLogs/CountLogMatches
-		Run: func(cobraCmd *cobra.Command, args []string) {
-			logHandlerFn(logPath, regex)
+		RunE: func(cobraCmd *cobra.Command, args []string) error {
+			err := logHandlerFn(logPath, regex)
+			if err != nil {
+				return err
+			}
+			return nil
 		},
 		// After logs loaded/counted - add ability to invoke one or multiple subcommands for IP/URLs i.e: ./app/logparser log -- command1 - command2 - command3
 		PostRun: func(cobraCmd *cobra.Command, args []string) {
@@ -51,7 +54,7 @@ func NewLogCmd(logPath string, regex string) *cobra.Command {
 	return logCmd
 }
 
-func logHandlerFn(logPath string, regex string) {
+func logHandlerFn(logPath string, regex string) error {
 
 	logChan := make(chan string)
 	errChan := make(chan error)
@@ -64,8 +67,7 @@ func logHandlerFn(logPath string, regex string) {
 
 	err := <-errChan
 	if err != nil {
-		slog.Error("error", "err", err)
-		return
+		return err
 	}
 
 	// receive URL counts
@@ -73,4 +75,6 @@ func logHandlerFn(logPath string, regex string) {
 
 	// receive IP counts
 	ipCounts = <-ipCountChan
+
+	return nil
 }
