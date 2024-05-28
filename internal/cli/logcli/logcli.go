@@ -3,30 +3,27 @@ package logcli
 import (
 	"log-parser/internal/cli/ipcli"
 	"log-parser/internal/cli/urlcli"
-	"log-parser/internal/config"
 	"log-parser/internal/domain/log_mgmt"
 	"log/slog"
 
 	"github.com/spf13/cobra"
 )
 
-func init() {
-	config.Init("./config", "config", "json")
-}
-
 var ipCounts map[string]int
 var urlCounts map[string]int
 
-func NewLogCmd() *cobra.Command {
+func NewLogCmd(logPath string, regex string) *cobra.Command {
 
-	// Ability to invoke one or multiple commands i.e. logparser and -- command1 - command2 - command3
-	var andCmd = &cobra.Command{
-		Use:   "and -- ip active $(IP_COUNT) - ip unique - url top $(URL_COUNT)",
-		Short: "run multiple logparser commands separated by -",
-		Long:  "Load Logs, Counts Log Matches, and allows to run multiple logparser commands separated by -",
+	var logCmd = &cobra.Command{
+		Use:   "log -- ip active $(IP_COUNT) - ip unique - url top $(URL_COUNT)",
+		Short: "run multiple IP/URL commands separated by -",
+		Long:  "Load Logs, Counts Log Matches, and can run multiple IP/URL commands separated by -",
+		// Call the logHandlerFn to LoadLogs/CountLogMatches
 		Run: func(cobraCmd *cobra.Command, args []string) {
-			logHandlerFn()
-
+			logHandlerFn(logPath, regex)
+		},
+		// After logs loaded/counted - add ability to invoke one or multiple subcommands for IP/URLs i.e: ./app/logparser log -- command1 - command2 - command3
+		PostRun: func(cobraCmd *cobra.Command, args []string) {
 			var cmdParts []string
 			var cmdList [][]string
 			for _, arg := range args {
@@ -51,20 +48,19 @@ func NewLogCmd() *cobra.Command {
 		},
 	}
 
-	return andCmd
+	return logCmd
 }
 
-func logHandlerFn() {
-	cfg := config.Values
+func logHandlerFn(logPath string, regex string) {
 
 	logChan := make(chan string)
 	errChan := make(chan error)
 	urlCountChan := make(chan map[string]int)
 	ipCountChan := make(chan map[string]int)
 
-	go log_mgmt.LoadLogs(cfg.Path.LogPath, logChan, errChan)
+	go log_mgmt.LoadLogs(logPath, logChan, errChan)
 
-	go log_mgmt.CountLogMatch(cfg.Regex.MatchIPsURLsIgnoreQuery, logChan, urlCountChan, ipCountChan)
+	go log_mgmt.CountLogMatch(regex, logChan, urlCountChan, ipCountChan)
 
 	err := <-errChan
 	if err != nil {
