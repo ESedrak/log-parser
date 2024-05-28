@@ -23,7 +23,7 @@ func TestNewCli(t *testing.T) {
 			wantShort:     "LogParser CLI application",
 			wantLong:      "Logparser CLI application\nUse this CLI for all your log parsing needs.",
 			subCmdArgs:    []string{"log"},
-			wantSubCmdUse: "log -- ip active $(IP_COUNT) - ip unique - url top $(URL_COUNT)",
+			wantSubCmdUse: "log -- ip unique - ip active $(IP_COUNT) - url top $(URL_COUNT)",
 		},
 	}
 
