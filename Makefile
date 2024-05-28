@@ -14,35 +14,35 @@ build:
 
 .PHONY: run-all 
 run-all: 
-	./app/logparser and -- url top $(URL_COUNT) - ip active $(IP_COUNT) - ip unique
+	./app/logparser log -- url top $(URL_COUNT) - ip active $(IP_COUNT) - ip unique
 
 .PHONY: run-ip
 run-ip: 
-	./app/logparser and -- ip active $(IP_COUNT) - ip unique
+	./app/logparser log -- ip active $(IP_COUNT) - ip unique
 
 .PHONY: run-ip-active 
-run-ip-count: 
+run-ip-active: 
 	@echo "Usage: make run-ip IP_COUNT=<number>"
-	./app/logparser and -- ip active $(IP_COUNT)
+	./app/logparser log -- ip active $(IP_COUNT)
 
 .PHONY: run-ip-unique 
 run-ip-unique: 
-	./app/logparser and -- ip unique
+	./app/logparser log -- ip unique
 
 .PHONY: run-url-top
 run-url-top: 
 	@echo "Usage: make run-url URL_COUNT=<number>"
-	./app/logparser and -- url top $(URL_COUNT)
+	./app/logparser log -- url top $(URL_COUNT)
 
 .PHONY: run-counts
 run-counts: 
 	@echo "Usage: make run-url URL_COUNT=<number>"
-	./app/logparser and -- ip active $(IP_COUNT) - url top $(URL_COUNT)
+	./app/logparser log -- ip active $(IP_COUNT) - url top $(URL_COUNT)
 
 .PHONY: run-help
 run-help: 
-	@echo "Usage: make run-ip IP_COUNT=<number>"
-	./app/logparser and --help
+	@echo "Usage: make run-all IP_COUNT=x URL_COUNT=x \n"
+	./app/logparser log --help
 
 .PHONY: tidy
 tidy:
