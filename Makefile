@@ -10,7 +10,7 @@ clean:
 
 .PHONY: build
 build:
-	go build -o ./app/logparser ./cmd/logparser/main.
+	go build -o ./app/logparser ./cmd/logparser/main.go
 	
 .PHONY: run
 run: 
