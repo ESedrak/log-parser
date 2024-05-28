@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	config.Init("/config/config.json")
+	config.Init("./testdata", "good", "json")
 }
 
 func TestCountLogMatch(t *testing.T) {

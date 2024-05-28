@@ -56,15 +56,17 @@ Design 2.0:
 - If counts are equal:
   - Order by IP/URL (in ascending order) i.e. now idempotent
 
+Design 3.0:
+
+- Add golangs popular pkg's cobra (for building CLI) + viper (for config loading)
+- Able to use the CLI to parse a custom number of requested URL's or IPs (or both)
+- Uses an 'and' command to have the ability to invoke one or multiple commands (top URL, most active ip, unique ips)
+
 Future Design Possibilities:
 
 - Use batch workers for handling counting of logs. Example scenarios:
   - Wait for 10 logs before the log is matched and counted (currently one log is being matched and counted at a time)
   - Schedule the logs to be counted such as every hour
-- Use golang's popular packages - cobra and viper (and potentially promptui):
-  - cobra: for building CLI
-  - viper: for config loading (easily be able to override default settings and is supported by many types of files: JSON, TOML, YAML, ENV)
-  - promptui: create command-line prompts for user input
 
 ## Dependencies
 
@@ -94,10 +96,40 @@ To build and test the application:
 make all
 ```
 
-To run the application:
+Check available commands (application uses a CLI):
 
 ```sh
-make run
+make run-help
+```
+
+Run the application with default configuration (returns top 3 URLs/IPs and number of unique IPs):
+
+```sh
+make run-all
+```
+
+Run the application with custom configurations (replace x with the number of IPs/URLs to return):
+
+```sh
+make run-all IP_COUNT=x URL_COUNT=x
+```
+
+Run the application and only return IPs(can add IP_COUNT=x to choose the number of IPs to return: defaults to 3):
+
+```sh
+make run-ip-active
+```
+
+Run the application return IPs information (return 3 most active IPs and number of unique IPs):
+
+```sh
+make run-ip
+```
+
+Run the application and only return URLs (can add URL_COUNT=x to choose the number of URLs to return: defaults to 3):
+
+```sh
+make run-url-top
 ```
 
 Run all tests:

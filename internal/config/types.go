@@ -1,20 +1,20 @@
 package config
 
 type Config struct {
-	RequestedNum RequestedNum `json:"requestedNum"`
-	Regex        Regex        `json:"regex"`
-	Path         Path         `json:"path"`
+	RequestedNum RequestedNum `mapstructure:"requestedNum"`
+	Regex        Regex        `mapstructure:"regex"`
+	Path         Path         `mapstructure:"path"`
 }
 
 type RequestedNum struct {
-	IP  int `json:"ip"`
-	URL int `json:"url"`
+	IP  int `mapstructure:"ip"`
+	URL int `mapstructure:"url"`
 }
 
 type Regex struct {
-	MatchIPsURLsIgnoreQuery string `json:"matchIPsURLsIgnoreQuery"`
+	MatchIPsURLsIgnoreQuery string `mapstructure:"matchIPsURLsIgnoreQuery"`
 }
 
 type Path struct {
-	LogPath string `json:"logpath"`
+	LogPath string `mapstructure:"logpath"`
 }
