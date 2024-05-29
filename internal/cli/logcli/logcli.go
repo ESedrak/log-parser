@@ -22,29 +22,9 @@ func NewLogCmd(logPath string, regex string) *cobra.Command {
 			err := logHandlerFn(logPath, regex)
 			cobra.CheckErr(err)
 		},
-		// After logs loaded/counted - add ability to invoke one or multiple subcommands for IP/URLs i.e: ./app/logparser log -- command1 - command2 - command3
+		// After Run - add ability for multiple command execution for IPs/URLs i.e: ./app/logparser log -- command1 - command2 - command3
 		PostRun: func(cobraCmd *cobra.Command, args []string) {
-			var cmdParts []string
-			var cmdList [][]string
-			for _, arg := range args {
-				if arg == "-" {
-					if len(cmdParts) > 0 {
-						cmdList = append(cmdList, cmdParts)
-						cmdParts = []string{}
-					}
-				} else {
-					cmdParts = append(cmdParts, arg)
-				}
-			}
-			cmdList = append(cmdList, cmdParts)
-
-			for _, cmdParts := range cmdList {
-				cmd := &cobra.Command{}
-				//Add all IP/URL commands
-				cmd.AddCommand(ipcli.NewIPCmd(ipCounts), urlcli.NewURLCmd(urlCounts))
-				cmd.SetArgs(cmdParts)
-				cmd.Execute()
-			}
+			multipleCmdExecution(args)
 		},
 	}
 
@@ -74,4 +54,28 @@ func logHandlerFn(logPath string, regex string) error {
 	ipCounts = <-ipCountChan
 
 	return nil
+}
+
+func multipleCmdExecution(args []string) {
+	var cmdParts []string
+	var cmdList [][]string
+	for _, arg := range args {
+		if arg == "-" {
+			if len(cmdParts) > 0 {
+				cmdList = append(cmdList, cmdParts)
+				cmdParts = []string{}
+			}
+		} else {
+			cmdParts = append(cmdParts, arg)
+		}
+	}
+	cmdList = append(cmdList, cmdParts)
+
+	for _, cmdParts := range cmdList {
+		cmd := &cobra.Command{}
+		//Allow multiple command execution for all IP/URL commands
+		cmd.AddCommand(ipcli.NewIPCmd(ipCounts), urlcli.NewURLCmd(urlCounts))
+		cmd.SetArgs(cmdParts)
+		cmd.Execute()
+	}
 }
