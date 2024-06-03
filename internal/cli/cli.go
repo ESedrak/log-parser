@@ -6,14 +6,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewCli(logPath string, regex string) *cobra.Command {
+func NewCli() *cobra.Command {
 
 	var logparser = &cobra.Command{
 		Use:   "logparser",
 		Short: "LogParser CLI application",
 		Long:  "Logparser CLI application\nUse this CLI for all your log parsing needs.",
 	}
-	logparser.AddCommand(logcli.NewLogCmd(logPath, regex))
+	logparser.AddCommand(logcli.NewLogCmd())
 
 	return logparser
 }

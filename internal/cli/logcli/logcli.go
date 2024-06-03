@@ -3,6 +3,7 @@ package logcli
 import (
 	"log-parser/internal/cli/ipcli"
 	"log-parser/internal/cli/urlcli"
+	"log-parser/internal/config"
 	"log-parser/internal/domain/log_mgmt"
 
 	"github.com/spf13/cobra"
@@ -11,7 +12,8 @@ import (
 var ipCounts map[string]int
 var urlCounts map[string]int
 
-func NewLogCmd(logPath string, regex string) *cobra.Command {
+func NewLogCmd() *cobra.Command {
+	cfg := config.Values
 
 	var logCmd = &cobra.Command{
 		Use:   "log -- ip unique - ip active $(IP_COUNT) - url top $(URL_COUNT)",
@@ -19,12 +21,12 @@ func NewLogCmd(logPath string, regex string) *cobra.Command {
 		Long:  "Load Logs, Counts Log Matches, and can run multiple IP/URL commands separated by -",
 		// Call the logHandlerFn to LoadLogs/CountLogMatches
 		Run: func(cobraCmd *cobra.Command, args []string) {
-			err := logHandlerFn(logPath, regex)
+			err := logHandlerFn(cfg.Path.LogPath, cfg.Regex.MatchIPsURLsIgnoreQuery)
 			cobra.CheckErr(err)
 		},
 		// After Run - add ability for multiple command execution for IPs/URLs i.e: ./app/logparser log -- command1 - command2 - command3
 		PostRun: func(cobraCmd *cobra.Command, args []string) {
-			multipleCmdExecution(args)
+			multipleCmdExecution(args, cfg.RequestedNum.IP, cfg.RequestedNum.URL)
 		},
 	}
 
@@ -56,7 +58,7 @@ func logHandlerFn(logPath string, regex string) error {
 	return nil
 }
 
-func multipleCmdExecution(args []string) {
+func multipleCmdExecution(args []string, requestedNumIP int, requestedNumURL int) {
 	var cmdParts []string
 	var cmdList [][]string
 	for _, arg := range args {
@@ -74,7 +76,7 @@ func multipleCmdExecution(args []string) {
 	for _, cmdParts := range cmdList {
 		cmd := &cobra.Command{}
 		//Allow multiple command execution for all IP/URL commands
-		cmd.AddCommand(ipcli.NewIPCmd(ipCounts), urlcli.NewURLCmd(urlCounts))
+		cmd.AddCommand(ipcli.NewIPCmd(ipCounts, requestedNumIP), urlcli.NewURLCmd(urlCounts, requestedNumURL))
 		cmd.SetArgs(cmdParts)
 		cmd.Execute()
 	}

@@ -1,6 +1,3 @@
-NUM_IPS ?= 3
-NUM_URLS ?= 3
-
 .PHONY: all
 all: tidy build test
 
