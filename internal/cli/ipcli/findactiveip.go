@@ -17,7 +17,7 @@ func newFindMostActiveIP() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			requestedNum, err := strconv.Atoi(args[0])
 			if err != nil {
-				slog.Error("Error: argument must be an integer", "err", err)
+				slog.Error("Requested number of IPs to return must be an integer", "err", err)
 				return
 			}
 			findMostActiveIP(requestedNum)

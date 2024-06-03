@@ -17,7 +17,7 @@ func newFindTopRequestedURLs() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			requestedNum, err := strconv.Atoi(args[0])
 			if err != nil {
-				slog.Error("Error: argument must be an integer", "err", err)
+				slog.Error("Requested number of URLs to return must be an integer", "err", err)
 				return
 			}
 			findTopRequestedURLs(requestedNum)
