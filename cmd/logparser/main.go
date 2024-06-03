@@ -12,7 +12,7 @@ func init() {
 }
 
 func main() {
-	rootCmd := cli.NewCli()
+	rootCmd := cli.NewCLI()
 
 	cobra.CheckErr(rootCmd.Execute())
 }

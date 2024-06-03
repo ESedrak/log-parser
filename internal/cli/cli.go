@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewCli() *cobra.Command {
+func NewCLI() *cobra.Command {
 
 	var logparser = &cobra.Command{
 		Use:   "logparser",
