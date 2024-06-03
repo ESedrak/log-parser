@@ -102,7 +102,7 @@ Check available commands (application uses a CLI):
 make run-help
 ```
 
-Run the application with default configuration (returns top 3 URLs/IPs and number of unique IPs):
+Run the application with default configuration (returns the top 3 URLs/IPs and number of unique IPs):
 
 ```sh
 make run-all
@@ -111,22 +111,22 @@ make run-all
 Run the application with custom configurations (replace x with the number of IPs/URLs to return):
 
 ```sh
-make run-all IP_COUNT=x URL_COUNT=x
+make run-all NUM_IPS=x NUM_URLS=x
 ```
 
-Run the application and only return IPs(can add IP_COUNT=x to choose the number of IPs to return: defaults to 3):
+Run the application and only return IPs(can add NUM_IPS=x to choose the number of IPs to return: defaults to 3):
 
 ```sh
 make run-ip-active
 ```
 
-Run the application return IPs information (return 3 most active IPs and number of unique IPs):
+Run the application and only return IPs information (can add NUM_IPS=x to choose the number of most active IPs to return: defaults to 3):
 
 ```sh
 make run-ip
 ```
 
-Run the application and only return URLs (can add URL_COUNT=x to choose the number of URLs to return: defaults to 3):
+Run the application and only return URLs information (can add NUM_URLS=x to choose the number of top URLs to return: defaults to 3):
 
 ```sh
 make run-url-top

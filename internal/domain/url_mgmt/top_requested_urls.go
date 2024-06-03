@@ -18,7 +18,7 @@ type URLCount struct {
  */
 func TopRequestedURLs(urlCounts map[string]int, requestedNum int) ([]URLCount, error) {
 	if requestedNum < 1 {
-		return nil, errors.New("requested count for URLs has to be greater than 0")
+		return nil, errors.New("requested number of URL results has to be greater than 0")
 	}
 
 	var urlCount []URLCount
@@ -38,7 +38,7 @@ func TopRequestedURLs(urlCounts map[string]int, requestedNum int) ([]URLCount, e
 	})
 
 	if len(urlCount) < requestedNum {
-		slog.Warn("requested number exceeds the the number of unique URLs: returning the maximum possible amount")
+		slog.Warn("requested number of results exceeds the max number of available URLs: returning the maximum possible amount")
 		return urlCount, nil
 	}
 

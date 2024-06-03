@@ -18,7 +18,7 @@ type IPCount struct {
  */
 func MostActiveIP(ipCounts map[string]int, requestedNum int) ([]IPCount, error) {
 	if requestedNum < 1 {
-		return nil, errors.New("requested number for IPs has to be greater than 0")
+		return nil, errors.New("requested number of IP results has to be greater than 0")
 	}
 
 	var ipCount []IPCount
@@ -38,7 +38,7 @@ func MostActiveIP(ipCounts map[string]int, requestedNum int) ([]IPCount, error) 
 	})
 
 	if len(ipCount) < requestedNum {
-		slog.Warn("requested number exceeds the number of unique IPs: returning the maximum possible amount")
+		slog.Warn("requested number of results exceeds the max number of available IPs: returning the maximum possible amount")
 		return ipCount, nil
 	}
 

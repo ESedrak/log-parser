@@ -1,5 +1,5 @@
-IP_COUNT ?= 3
-URL_COUNT ?= 3
+NUM_IPS ?= 3
+NUM_URLS ?= 3
 
 .PHONY: all
 all: tidy build test
@@ -18,16 +18,16 @@ run:
 
 .PHONY: run-all 
 run-all: 
-	./app/logparser log -- ip unique - ip active $(IP_COUNT) - url top $(URL_COUNT)
+	./app/logparser log -- ip unique - ip active $(NUM_IPS) - url top $(NUM_URLS)
 
 .PHONY: run-ip
 run-ip: 
-	./app/logparser log -- ip unique - ip active $(IP_COUNT)
+	./app/logparser log -- ip unique - ip active $(NUM_IPS)
 
 .PHONY: run-ip-active 
 run-ip-active: 
-	@echo "Usage: make run-ip IP_COUNT=<number>"
-	./app/logparser log -- ip active $(IP_COUNT)
+	@echo "Usage: make run-ip NUM_IPS=<number>"
+	./app/logparser log -- ip active $(NUM_IPS)
 
 .PHONY: run-ip-unique 
 run-ip-unique: 
@@ -35,17 +35,17 @@ run-ip-unique:
 
 .PHONY: run-url-top
 run-url-top: 
-	@echo "Usage: make run-url URL_COUNT=<number>"
-	./app/logparser log -- url top $(URL_COUNT)
+	@echo "Usage: make run-url NUM_URLS=<number>"
+	./app/logparser log -- url top $(NUM_URLS)
 
 .PHONY: run-counts
 run-counts: 
-	@echo "Usage: make run-url URL_COUNT=<number>"
-	./app/logparser log -- ip active $(IP_COUNT) - url top $(URL_COUNT)
+	@echo "Usage: make run-url NUM_URLS=<number>"
+	./app/logparser log -- ip active $(NUM_IPS) - url top $(NUM_URLS)
 
 .PHONY: run-help
 run-help: 
-	@echo "Usage: make run-all IP_COUNT=x URL_COUNT=x \n"
+	@echo "Usage: make run-all NUM_IPS=x NUM_URLS=x \n"
 	./app/logparser log --help
 
 .PHONY: tidy
