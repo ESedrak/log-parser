@@ -12,10 +12,7 @@ func init() {
 }
 
 func main() {
-	logPath := config.Values.Path.LogPath
-	regex := config.Values.Regex.MatchIPsURLsIgnoreQuery
-
-	rootCmd := cli.NewCli(logPath, regex)
+	rootCmd := cli.NewCLI()
 
 	cobra.CheckErr(rootCmd.Execute())
 }

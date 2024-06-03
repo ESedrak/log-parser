@@ -8,26 +8,33 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newFindMostActiveIP() *cobra.Command {
+func newFindMostActiveIP(ipCounts map[string]int, requestedNumIP int) *cobra.Command {
 	ipFindActiveCmd := &cobra.Command{
 		Use:   "active",
-		Short: "Find the most active IP",
-		Long:  "Find the most active IP. \nRequested number of results is a required argument.",
-		Args:  cobra.ExactArgs(1),
+		Short: "Return the most active IPs",
+		Long:  "Return the most active IPs. \nSpecify the requested number of results to return. Otherwise it will default to the configs requestedNum for IPs",
+		Args:  cobra.MaximumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			requestedNum, err := strconv.Atoi(args[0])
-			if err != nil {
-				slog.Error("Requested number of IPs to return must be an integer", "err", err)
-				return
+			var requestedNum int
+			var err error
+
+			if len(args) == 0 {
+				requestedNum = requestedNumIP
+			} else {
+				requestedNum, err = strconv.Atoi(args[0])
+				if err != nil {
+					slog.Error("Requested number of IPs to return must be an integer", "err", err)
+					return
+				}
 			}
-			findMostActiveIP(requestedNum)
+			findMostActiveIP(ipCounts, requestedNum)
 		},
 	}
 
 	return ipFindActiveCmd
 }
 
-func findMostActiveIP(requestedNum int) {
+func findMostActiveIP(ipCounts map[string]int, requestedNum int) {
 
 	result, err := ip_mgmt.MostActiveIP(ipCounts, requestedNum)
 	cobra.CheckErr(err)

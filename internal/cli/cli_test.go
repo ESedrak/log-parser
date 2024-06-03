@@ -1,14 +1,10 @@
 package cli
 
-import (
-	"testing"
-)
+import "testing"
 
-func TestNewCli(t *testing.T) {
+func TestNewCLI(t *testing.T) {
 	tests := []struct {
 		name          string
-		logPath       string
-		regex         string
 		wantUse       string
 		wantShort     string
 		wantLong      string
@@ -17,8 +13,6 @@ func TestNewCli(t *testing.T) {
 	}{
 		{
 			name:          "Test NewCli",
-			logPath:       "logs/log_file.log",
-			regex:         "(\\d+\\.\\d+\\.\\d+\\.\\d+).+(?:GET|POST|PUT|DELETE|HEAD)\\s([^ ?]+)",
 			wantUse:       "logparser",
 			wantShort:     "LogParser CLI application",
 			wantLong:      "Logparser CLI application\nUse this CLI for all your log parsing needs.",
@@ -29,7 +23,7 @@ func TestNewCli(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rootCmd := NewCli(tt.logPath, tt.regex)
+			rootCmd := NewCLI()
 
 			// Verify the root command properties
 			if rootCmd.Use != tt.wantUse {

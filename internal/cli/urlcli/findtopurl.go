@@ -8,26 +8,33 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newFindTopRequestedURLs() *cobra.Command {
+func newFindTopRequestedURLs(urlCounts map[string]int, requestedNumURL int) *cobra.Command {
 	urlFindTopRequestedCmd := &cobra.Command{
 		Use:   "top",
-		Short: "Find the top requested URLs",
-		Long:  "Find the top requested URLs. \nRequested number of results is a required argument.",
-		Args:  cobra.ExactArgs(1),
+		Short: "Return the top requested URLs",
+		Long:  "Return the top requested URLs. \nSpecify the requested number of results to return. Otherwise it will default to the configs requestedNum for URLs",
+		Args:  cobra.MaximumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			requestedNum, err := strconv.Atoi(args[0])
-			if err != nil {
-				slog.Error("Requested number of URLs to return must be an integer", "err", err)
-				return
+			var requestedNum int
+			var err error
+
+			if len(args) == 0 {
+				requestedNum = requestedNumURL
+			} else {
+				requestedNum, err = strconv.Atoi(args[0])
+				if err != nil {
+					slog.Error("Requested number of URLs to return must be an integer", "err", err)
+					return
+				}
 			}
-			findTopRequestedURLs(requestedNum)
+			findTopRequestedURLs(urlCounts, requestedNum)
 		},
 	}
 
 	return urlFindTopRequestedCmd
 }
 
-func findTopRequestedURLs(requestedNum int) {
+func findTopRequestedURLs(urlCounts map[string]int, requestedNum int) {
 
 	result, err := url_mgmt.TopRequestedURLs(urlCounts, requestedNum)
 	cobra.CheckErr(err)

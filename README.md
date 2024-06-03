@@ -102,13 +102,13 @@ Check available commands (application uses a CLI):
 make run-help
 ```
 
-Run the application with default configuration (returns the top 3 URLs/IPs and number of unique IPs):
+Run the application with the default configuration (returns the top 3 URLs/IPs and number of unique IPs):
 
 ```sh
 make run-all
 ```
 
-Run the application with custom configurations (replace x with the number of IPs/URLs to return):
+Run the application with a custom configuration (replace x with the number of IPs/URLs to return):
 
 ```sh
 make run-all NUM_IPS=x NUM_URLS=x
