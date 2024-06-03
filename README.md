@@ -60,7 +60,7 @@ Design 3.0:
 
 - Add golangs popular pkg's cobra (for building CLI) + viper (for config loading)
 - Able to use the CLI to parse a custom number of requested URL's or IPs (or both)
-- Uses an 'and' command to have the ability to invoke one or multiple commands (top URL, most active ip, unique ips)
+- Uses a 'log' command to have the ability to invoke one or multiple commands (top URL, most active ip, unique ips)
 
 Future Design Possibilities:
 
