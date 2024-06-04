@@ -44,7 +44,8 @@ Initial Design
 - Logs stored in logs/log_file.log
 - Will always want to ignore a query in a url path
 - HTTP methods wanted: `GET, PUT, DELETE, POST, HEAD`
-- Returns the exact number of requested results (default 3 for both URL's and IP's) - currently: not idempotent
+- Returns the exact number of requested results (default 3 for both URL's and IP's)
+  - Not idempotent
 - Loads up the entire file and parses it (can be improved by streaming as input)
 
 Design 2.0:
@@ -53,8 +54,8 @@ Design 2.0:
 - The log file is read one line at a time, with each line being processed as it's read (doesn't buffer the entire file into memory).
 - Use goroutines and channels to achieve concurrency for more efficient processing of log data
 - Configure various inputs (e.g. regex, requested number of returned IPs/URLs, the log file path)
-- If counts are equal:
-  - Order by IP/URL (in ascending order) i.e. now idempotent
+- If counts are equal, order by IP/URL (in ascending order)
+  - Now idempotent
 
 Design 3.0:
 
@@ -114,19 +115,19 @@ Run the application with a custom configuration (replace x with the number of IP
 make run-all NUM_IPS=x NUM_URLS=x
 ```
 
-Run the application and only return IPs(can add NUM_IPS=x to choose the number of IPs to return: defaults to 3):
+Run the application and only return the most active IPs(can add NUM_IPS=x to choose the number of IPs to return: defaults to 3):
 
 ```sh
 make run-ip-active
 ```
 
-Run the application and only return IPs information (can add NUM_IPS=x to choose the number of most active IPs to return: defaults to 3):
+Run the application and returns all information on IPs (can add NUM_IPS=x to choose the number of most active IPs to return: defaults to 3):
 
 ```sh
 make run-ip
 ```
 
-Run the application and only return URLs information (can add NUM_URLS=x to choose the number of top URLs to return: defaults to 3):
+Run the application and only return top requested URLs (can add NUM_URLS=x to choose the number of top URLs to return: defaults to 3):
 
 ```sh
 make run-url-top
